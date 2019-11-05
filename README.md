@@ -1,4 +1,4 @@
-# weserv SDK
+# Euclidian Sequence Generator
 
 [![Download](https://api.bintray.com/packages/volcanomobile/public/euclidian-sequence-generator/images/download.svg?version=0.1) ](https://bintray.com/volcanomobile/public/euclidian-sequence-generator/0.1/link)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
