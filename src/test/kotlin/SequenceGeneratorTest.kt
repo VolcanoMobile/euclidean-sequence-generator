@@ -168,4 +168,40 @@ class SequenceGeneratorTest {
     {
         assertArrayEquals(booleanArrayOf(), SequenceGenerator.generateSequence(0,0,0))
     }
+
+    @Test
+    fun `negativeOffset_1`()
+    {
+        assertArrayEquals(SequenceGenerator.generateSequence(6,5,5), SequenceGenerator.generateSequence(6,5,-1))
+    }
+
+    @Test
+    fun `negativeOffset_2`()
+    {
+        assertArrayEquals(SequenceGenerator.generateSequence(6,5,4), SequenceGenerator.generateSequence(6,5,-2))
+    }
+
+    @Test
+    fun `negativeOffset_3`()
+    {
+        assertArrayEquals(SequenceGenerator.generateSequence(6,5,5), SequenceGenerator.generateSequence(6,5,-7))
+    }
+
+    @Test
+    fun offsetMultipleOfSteps_1()
+    {
+        assertArrayEquals(booleanArrayOf(true, true, true, true, true, false), SequenceGenerator.generateSequence(6,5,12))
+    }
+
+    @Test
+    fun offsetMultipleOfSteps_2()
+    {
+        assertArrayEquals(booleanArrayOf(true, true, true, true, true, false), SequenceGenerator.generateSequence(6,5,-12))
+    }
+
+    @Test
+    fun offsetMultipleOfSteps_3()
+    {
+        assertArrayEquals(booleanArrayOf(true, true, true, true, true, false), SequenceGenerator.generateSequence(6,5,-6))
+    }
 }

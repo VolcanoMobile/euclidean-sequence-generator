@@ -85,7 +85,7 @@ object SequenceGenerator {
             outBeat = binaryConcat(outBeat, workbeat[i])
         }
 
-        if (offset > 0) {
+        if (offset != 0 && offset % steps != 0) {
             outBeat = binaryRightRotate(offset, outBeat, steps)
         }
 
@@ -94,12 +94,15 @@ object SequenceGenerator {
 
     internal fun binaryRightRotate(shift: Int, value: Int, patternLenght: Int): Int {
         require(patternLenght > 1)
-        require(shift > 0)
         require(value > 0)
+
+        var offset = shift
+        while (offset < 0)
+            offset += patternLenght
 
         val mask = (1 shl patternLenght) - 1
         val maskedValue = value and mask
-        return ((maskedValue ushr shift) or (maskedValue shl (patternLenght - shift))) and mask
+        return ((maskedValue ushr offset) or (maskedValue shl (patternLenght - offset))) and mask
     }
 
     internal fun findBinaryLenght(value: Int): Int {
