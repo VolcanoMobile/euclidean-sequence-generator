@@ -46,7 +46,7 @@ bintray {
         name = 'euclidian-sequence-generator'
         userOrg = 'volcanomobile'
         licenses = ['Apache-2.0']
-        vcsUrl = 'https://github.com/VolcanoMobile/euclidian-sequence-generator.git'
+        vcsUrl = 'https://github.com/VolcanoMobile/euclidean-sequence-generator.git'
         githubRepo = 'VolcanoMobile/euclidian-sequence-generator'
     }
 }
