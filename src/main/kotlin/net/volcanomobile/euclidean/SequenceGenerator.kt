@@ -1,4 +1,4 @@
-package net.volcanomobile.euclidian
+package net.volcanomobile.euclidean
 
 object SequenceGenerator {
 
@@ -30,7 +30,10 @@ object SequenceGenerator {
             // Handle easy cases where there is no or only one remainder
             for (i in 0 until pulses) {
                 for (j in workbeatCount - 1 downTo workbeatCount - perPulse) {
-                    workbeat[i] = binaryConcat(workbeat[i], workbeat[j])
+                    workbeat[i] = binaryConcat(
+                        workbeat[i],
+                        workbeat[j]
+                    )
                 }
                 workbeatCount -= perPulse
             }
@@ -45,7 +48,10 @@ object SequenceGenerator {
                         var trimCount = 0
 
                         for (i in 0 until groupA - aRemainder) {
-                            workbeat[i] = binaryConcat(workbeat[i], workbeat[workbeatCount - 1 - i])
+                            workbeat[i] = binaryConcat(
+                                workbeat[i],
+                                workbeat[workbeatCount - 1 - i]
+                            )
                             trimCount++
                         }
 
@@ -58,7 +64,11 @@ object SequenceGenerator {
                         var trimCount = 0
 
                         for (i in workbeatCount - 1 downTo groupA + bRemainder) {
-                            workbeat[workbeatCount - i - 1] = binaryConcat(workbeat[workbeatCount - i - 1], workbeat[i])
+                            workbeat[workbeatCount - i - 1] =
+                                binaryConcat(
+                                    workbeat[workbeatCount - i - 1],
+                                    workbeat[i]
+                                )
                             trimCount++
                         }
 
@@ -69,7 +79,10 @@ object SequenceGenerator {
                         var trimCount = 0
 
                         for (i in 0 until groupA) {
-                            workbeat[i] = binaryConcat(workbeat[i], workbeat[workbeatCount - 1 - i])
+                            workbeat[i] = binaryConcat(
+                                workbeat[i],
+                                workbeat[workbeatCount - 1 - i]
+                            )
                             trimCount++
                         }
 
@@ -82,14 +95,22 @@ object SequenceGenerator {
         var outBeat = 0
         // Concatenate workbeat into outBeat - according to workbeatCount
         for (i in 0 until workbeatCount) {
-            outBeat = binaryConcat(outBeat, workbeat[i])
+            outBeat =
+                binaryConcat(outBeat, workbeat[i])
         }
 
         if (offset != 0 && offset % steps != 0) {
-            outBeat = binaryRightRotate(offset, outBeat, steps)
+            outBeat = binaryRightRotate(
+                offset,
+                outBeat,
+                steps
+            )
         }
 
-        return BooleanArray(steps) { i -> readBit(outBeat, (steps - 1) - i) == 1 }
+        return BooleanArray(steps) { i -> readBit(
+            outBeat,
+            (steps - 1) - i
+        ) == 1 }
     }
 
     internal fun binaryRightRotate(shift: Int, value: Int, patternLenght: Int): Int {
