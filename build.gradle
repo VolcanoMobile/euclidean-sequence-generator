@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'net.volcanomobile'
-version '0.1.1'
+version '0.2'
 
 sourceCompatibility = 1.8
 
@@ -43,10 +43,10 @@ bintray {
     configurations = ['archives']
     pkg {
         repo = 'public'
-        name = 'euclidian-sequence-generator'
+        name = 'euclidean-sequence-generator'
         userOrg = 'volcanomobile'
         licenses = ['Apache-2.0']
-        vcsUrl = 'https://github.com/VolcanoMobile/euclidian-sequence-generator.git'
-        githubRepo = 'VolcanoMobile/euclidian-sequence-generator'
+        vcsUrl = 'https://github.com/VolcanoMobile/euclidean-sequence-generator.git'
+        githubRepo = 'VolcanoMobile/euclidean-sequence-generator'
     }
 }

@@ -1,4 +1,4 @@
-import net.volcanomobile.euclidian.SequenceGenerator
+import net.volcanomobile.euclidean.SequenceGenerator
 import org.junit.jupiter.api.Assertions.assertArrayEquals
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
