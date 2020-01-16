@@ -1,4 +1,4 @@
-# Euclidian Sequence Generator
+# Euclidean Sequence Generator
 
 [![Download](https://api.bintray.com/packages/volcanomobile/public/euclidean-sequence-generator/images/download.svg?version=0.2) ](https://bintray.com/volcanomobile/public/euclidean-sequence-generator/0.2/link)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
