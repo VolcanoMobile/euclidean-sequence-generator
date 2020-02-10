@@ -204,4 +204,10 @@ class SequenceGeneratorTest {
     {
         assertArrayEquals(booleanArrayOf(true, true, true, true, true, false), SequenceGenerator.generateSequence(6,5,-6))
     }
+
+    @Test
+    fun offsetLooping()
+    {
+        assertArrayEquals(booleanArrayOf(false, true, false, false), SequenceGenerator.generateSequence(4, 1, 5))
+    }
 }

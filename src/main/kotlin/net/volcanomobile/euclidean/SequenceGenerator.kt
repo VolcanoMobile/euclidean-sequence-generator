@@ -118,8 +118,11 @@ object SequenceGenerator {
         require(value > 0)
 
         var offset = shift
+
         while (offset < 0)
             offset += patternLenght
+        while (offset > patternLenght)
+            offset -= patternLenght
 
         val mask = (1 shl patternLenght) - 1
         val maskedValue = value and mask
