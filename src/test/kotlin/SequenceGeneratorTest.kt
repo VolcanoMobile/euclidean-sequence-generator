@@ -130,84 +130,84 @@ class SequenceGeneratorTest {
     @Test
     fun `generateSequence_1`()
     {
-        assertArrayEquals(booleanArrayOf(true, false, true, false), SequenceGenerator.generateSequence(4,2,0))
+        assertArrayEquals(booleanArrayOf(true, false, true, false), SequenceGenerator(4,2,0))
     }
 
     @Test
     fun `generateSequence_2`()
     {
-        assertArrayEquals(booleanArrayOf(true, false, false, true, false, false), SequenceGenerator.generateSequence(6,2,0))
+        assertArrayEquals(booleanArrayOf(true, false, false, true, false, false), SequenceGenerator(6,2,0))
     }
 
     @Test
     fun `generateSequence_3`()
     {
-        assertArrayEquals(booleanArrayOf(true, false, false, true, false, true, false, false, true, false, true, false, false), SequenceGenerator.generateSequence(13,5,0))
+        assertArrayEquals(booleanArrayOf(true, false, false, true, false, true, false, false, true, false, true, false, false), SequenceGenerator(13,5,0))
     }
 
     @Test
     fun `generateSequence_4`()
     {
-        assertArrayEquals(booleanArrayOf(true, false, false, true, false, false, true, false), SequenceGenerator.generateSequence(8,3,0))
+        assertArrayEquals(booleanArrayOf(true, false, false, true, false, false, true, false), SequenceGenerator(8,3,0))
     }
 
     @Test
     fun `generateSequence_5`()
     {
-        assertArrayEquals(booleanArrayOf(true, true, true, true, true, false), SequenceGenerator.generateSequence(6,5,0))
+        assertArrayEquals(booleanArrayOf(true, true, true, true, true, false), SequenceGenerator(6,5,0))
     }
 
     @Test
     fun `generateSequence_7`()
     {
-        assertArrayEquals(booleanArrayOf(false, false), SequenceGenerator.generateSequence(2,0,0))
+        assertArrayEquals(booleanArrayOf(false, false), SequenceGenerator(2,0,0))
     }
 
     @Test
     fun `generateSequence_8`()
     {
-        assertArrayEquals(booleanArrayOf(), SequenceGenerator.generateSequence(0,0,0))
+        assertArrayEquals(booleanArrayOf(), SequenceGenerator(0,0,0))
     }
 
     @Test
     fun `negativeOffset_1`()
     {
-        assertArrayEquals(SequenceGenerator.generateSequence(6,5,5), SequenceGenerator.generateSequence(6,5,-1))
+        assertArrayEquals(SequenceGenerator(6,5,5), SequenceGenerator(6,5,-1))
     }
 
     @Test
     fun `negativeOffset_2`()
     {
-        assertArrayEquals(SequenceGenerator.generateSequence(6,5,4), SequenceGenerator.generateSequence(6,5,-2))
+        assertArrayEquals(SequenceGenerator(6,5,4), SequenceGenerator(6,5,-2))
     }
 
     @Test
     fun `negativeOffset_3`()
     {
-        assertArrayEquals(SequenceGenerator.generateSequence(6,5,5), SequenceGenerator.generateSequence(6,5,-7))
+        assertArrayEquals(SequenceGenerator(6,5,5), SequenceGenerator(6,5,-7))
     }
 
     @Test
     fun offsetMultipleOfSteps_1()
     {
-        assertArrayEquals(booleanArrayOf(true, true, true, true, true, false), SequenceGenerator.generateSequence(6,5,12))
+        assertArrayEquals(booleanArrayOf(true, true, true, true, true, false), SequenceGenerator(6,5,12))
     }
 
     @Test
     fun offsetMultipleOfSteps_2()
     {
-        assertArrayEquals(booleanArrayOf(true, true, true, true, true, false), SequenceGenerator.generateSequence(6,5,-12))
+        assertArrayEquals(booleanArrayOf(true, true, true, true, true, false), SequenceGenerator(6,5,-12))
     }
 
     @Test
     fun offsetMultipleOfSteps_3()
     {
-        assertArrayEquals(booleanArrayOf(true, true, true, true, true, false), SequenceGenerator.generateSequence(6,5,-6))
+        assertArrayEquals(booleanArrayOf(true, true, true, true, true, false), SequenceGenerator(6,5,-6))
     }
 
     @Test
     fun offsetLooping()
     {
-        assertArrayEquals(booleanArrayOf(false, true, false, false), SequenceGenerator.generateSequence(4, 1, 5))
+        assertArrayEquals(booleanArrayOf(false, true, false, false), SequenceGenerator(4, 1, 5))
     }
 }
