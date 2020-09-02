@@ -2,7 +2,7 @@ package net.volcanomobile.euclidean
 
 object SequenceGenerator {
 
-    fun generateSequence(steps: Int, pulses: Int, offset: Int): BooleanArray {
+    operator fun invoke(steps: Int, pulses: Int, offset: Int): BooleanArray {
         require(steps >= 0)
         require(steps <= 16)
         require(pulses >= 0)
