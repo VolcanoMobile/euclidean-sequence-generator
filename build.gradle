@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'net.volcanomobile'
-version '0.3.0'
+version '0.3.1'
 
 allprojects {
     apply plugin: 'maven'
@@ -39,7 +39,7 @@ publishing {
             from components.java
             groupId 'net.volcanomobile'
             artifactId 'euclidean-sequence-generator'
-            version '0.3.0'
+            version '0.3.1'
             pom.withXml {
                 def root = asNode()
                 root.appendNode('name', 'Eucliedean Sequence Generator')
