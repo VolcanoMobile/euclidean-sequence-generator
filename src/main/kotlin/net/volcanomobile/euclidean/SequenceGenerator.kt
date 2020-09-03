@@ -1,164 +1,166 @@
 package net.volcanomobile.euclidean
 
-object SequenceGenerator {
+import net.volcanomobile.euclidean.builder.SequenceGeneratorBuilder
 
-    operator fun invoke(steps: Int, pulses: Int, offset: Int): BooleanArray {
-        require(steps >= 0)
-        require(steps <= 16)
-        require(pulses >= 0)
-        require(pulses <= steps)
+// DSL public entry point
+fun euclideanSequence(steps: Int = 0, pulses: Int= 0, offset: Int = 0) =
+    SequenceGeneratorBuilder(steps, pulses, offset).build().buildArray()
 
-        if (steps == 0)
-            return booleanArrayOf()
+internal data class SequenceGenerator(
+    val steps: Int, val pulses: Int, val offset: Int
+)
 
-        if (pulses == 0)
-            return BooleanArray(steps) { false }
+private fun SequenceGenerator.buildArray(): BooleanArray {
+    if (steps == 0)
+        return booleanArrayOf()
 
-        val pauses = steps - pulses
-        val perPulse = pauses / pulses
-        val remainder = pauses % pulses
+    if (pulses == 0)
+        return BooleanArray(steps) { false }
 
-        val workbeat = IntArray(steps)
-        var workbeatCount = steps
+    val pauses = steps - pulses
+    val perPulse = pauses / pulses
+    val remainder = pauses % pulses
 
-        // Populate workbeat with unsorted pulses and pauses
-        for (i in 0 until steps) {
-            workbeat[i] = if (i < pulses) 1 else 0
-        }
+    val workBeat = IntArray(steps)
+    var workBeatCount = steps
 
-        if (perPulse > 0 && remainder <= 1) {
-            // Handle easy cases where there is no or only one remainder
-            for (i in 0 until pulses) {
-                for (j in workbeatCount - 1 downTo workbeatCount - perPulse) {
-                    workbeat[i] = binaryConcat(
-                        workbeat[i],
-                        workbeat[j]
-                    )
-                }
-                workbeatCount -= perPulse
+    // Populate workbeat with unsorted pulses and pauses
+    for (i in 0 until steps) {
+        workBeat[i] = if (i < pulses) 1 else 0
+    }
+
+    if (perPulse > 0 && remainder <= 1) {
+        // Handle easy cases where there is no or only one remainder
+        for (i in 0 until pulses) {
+            for (j in workBeatCount - 1 downTo workBeatCount - perPulse) {
+                workBeat[i] = binaryConcat(
+                    workBeat[i],
+                    workBeat[j]
+                )
             }
-        } else {
-            var groupA = pulses
-            var groupB = pauses
+            workBeatCount -= perPulse
+        }
+    } else {
+        var groupA = pulses
+        var groupB = pauses
 
-            while (groupB > 1)
-                when {
-                    groupA > groupB -> {
-                        val aRemainder = groupA - groupB
-                        var trimCount = 0
+        while (groupB > 1)
+            when {
+                groupA > groupB -> {
+                    val aRemainder = groupA - groupB
+                    var trimCount = 0
 
-                        for (i in 0 until groupA - aRemainder) {
-                            workbeat[i] = binaryConcat(
-                                workbeat[i],
-                                workbeat[workbeatCount - 1 - i]
-                            )
-                            trimCount++
-                        }
-
-                        workbeatCount -= trimCount
-                        groupA = groupB
-                        groupB = aRemainder
+                    for (i in 0 until groupA - aRemainder) {
+                        workBeat[i] = binaryConcat(
+                            workBeat[i],
+                            workBeat[workBeatCount - 1 - i]
+                        )
+                        trimCount++
                     }
-                    groupB > groupA -> {
-                        val bRemainder = groupB - groupA
-                        var trimCount = 0
 
-                        for (i in workbeatCount - 1 downTo groupA + bRemainder) {
-                            workbeat[workbeatCount - i - 1] =
-                                binaryConcat(
-                                    workbeat[workbeatCount - i - 1],
-                                    workbeat[i]
-                                )
-                            trimCount++
-                        }
-
-                        workbeatCount -= trimCount
-                        groupB = bRemainder
-                    }
-                    else -> {
-                        var trimCount = 0
-
-                        for (i in 0 until groupA) {
-                            workbeat[i] = binaryConcat(
-                                workbeat[i],
-                                workbeat[workbeatCount - 1 - i]
-                            )
-                            trimCount++
-                        }
-
-                        workbeatCount -= trimCount
-                        groupB = 0
-                    }
+                    workBeatCount -= trimCount
+                    groupA = groupB
+                    groupB = aRemainder
                 }
-        }
+                groupB > groupA -> {
+                    val bRemainder = groupB - groupA
+                    var trimCount = 0
 
-        var outBeat = 0
-        // Concatenate workbeat into outBeat - according to workbeatCount
-        for (i in 0 until workbeatCount) {
-            outBeat =
-                binaryConcat(outBeat, workbeat[i])
-        }
+                    for (i in workBeatCount - 1 downTo groupA + bRemainder) {
+                        workBeat[workBeatCount - i - 1] =
+                            binaryConcat(
+                                workBeat[workBeatCount - i - 1],
+                                workBeat[i]
+                            )
+                        trimCount++
+                    }
 
-        if (offset != 0 && offset % steps != 0) {
-            outBeat = binaryRightRotate(
-                offset,
-                outBeat,
-                steps
-            )
-        }
+                    workBeatCount -= trimCount
+                    groupB = bRemainder
+                }
+                else -> {
+                    var trimCount = 0
 
-        return BooleanArray(steps) { i -> readBit(
+                    for (i in 0 until groupA) {
+                        workBeat[i] = binaryConcat(
+                            workBeat[i],
+                            workBeat[workBeatCount - 1 - i]
+                        )
+                        trimCount++
+                    }
+
+                    workBeatCount -= trimCount
+                    groupB = 0
+                }
+            }
+    }
+
+    var outBeat = 0
+    // Concatenate workbeat into outBeat - according to workbeatCount
+    for (i in 0 until workBeatCount) {
+        outBeat =
+            binaryConcat(outBeat, workBeat[i])
+    }
+
+    if (offset != 0 && offset % steps != 0) {
+        outBeat = binaryRightRotate(
+            offset,
             outBeat,
-            (steps - 1) - i
-        ) == 1 }
+            steps
+        )
     }
 
-    internal fun binaryRightRotate(shift: Int, value: Int, patternLenght: Int): Int {
-        require(patternLenght > 1)
-        require(value > 0)
+    return BooleanArray(steps) { i -> readBit(
+        outBeat,
+        (steps - 1) - i
+    ) == 1 }
+}
 
-        var offset = shift
+internal fun binaryRightRotate(shift: Int, value: Int, patternLenght: Int): Int {
+    require(patternLenght > 1)
+    require(value > 0)
 
-        while (offset < 0)
-            offset += patternLenght
-        while (offset > patternLenght)
-            offset -= patternLenght
+    var offset = shift
 
-        val mask = (1 shl patternLenght) - 1
-        val maskedValue = value and mask
-        return ((maskedValue ushr offset) or (maskedValue shl (patternLenght - offset))) and mask
-    }
+    while (offset < 0)
+        offset += patternLenght
+    while (offset > patternLenght)
+        offset -= patternLenght
 
-    internal fun findBinaryLenght(value: Int): Int {
-        require(value >= 0)
+    val mask = (1 shl patternLenght) - 1
+    val maskedValue = value and mask
+    return ((maskedValue ushr offset) or (maskedValue shl (patternLenght - offset))) and mask
+}
 
-        var lengthFound = false
-        var length = 1
+internal fun findBinaryLenght(value: Int): Int {
+    require(value >= 0)
 
-        for (q in 31 downTo  0) {
-            val bit = readBit(value, q)
-            if (bit == 1 && !lengthFound) {
-                length = q + 1
-                lengthFound = true
-            }
+    var lengthFound = false
+    var length = 1
+
+    for (q in 31 downTo  0) {
+        val bit = readBit(value, q)
+        if (bit == 1 && !lengthFound) {
+            length = q + 1
+            lengthFound = true
         }
-
-        return length
     }
 
-    internal fun readBit(value: Int, bit: Int): Int {
-        require(bit >= 0)
-        require(bit < 32)
-        require(value >= 0)
+    return length
+}
 
-        return if ((1 shl bit) and value != 0) 1 else 0
-    }
+internal fun readBit(value: Int, bit: Int): Int {
+    require(bit >= 0)
+    require(bit < 32)
+    require(value >= 0)
 
-    internal fun binaryConcat(a: Int, b: Int): Int {
-        require(a >= 0)
-        require(b >= 0)
+    return if ((1 shl bit) and value != 0) 1 else 0
+}
 
-        val bLenght = findBinaryLenght(b)
-        return a shl bLenght or b
-    }
+internal fun binaryConcat(a: Int, b: Int): Int {
+    require(a >= 0)
+    require(b >= 0)
+
+    val bLenght = findBinaryLenght(b)
+    return a shl bLenght or b
 }
