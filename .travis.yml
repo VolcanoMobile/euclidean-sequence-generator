@@ -11,6 +11,6 @@ jdk:
 
 deploy:
   - provider: script
-    script: gradlew publishReleasePublicationToBintrayRepository
+    script: ./gradlew publishReleasePublicationToBintrayRepository
     on:
       branch: master
