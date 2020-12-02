@@ -1,10 +1,17 @@
+buildscript {
+    ext {
+        groupName = 'net.volcanomobile'
+        versionName = '0.3.2'
+    }
+}
+
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.4.0'
     id "maven-publish"
 }
 
-group 'net.volcanomobile'
-version '0.3.1'
+group groupName
+version versionName
 
 allprojects {
     apply plugin: 'maven'
@@ -37,56 +44,4 @@ test {
     }
 }
 
-Properties properties = new Properties()
-File file = rootProject.file('local.properties')
-if (file.exists()) {
-    properties.load(file.newDataInputStream())
-}
-
-afterEvaluate {
-    publishing {
-        publications {
-            release(MavenPublication) {
-                groupId = 'net.volcanomobile'
-                artifactId = 'euclidean-sequence-generator'
-                version = '0.3.1'
-
-                from components.java
-
-                pom {
-                    name = 'Eucliedean Sequence Generator'
-                    description = 'Simple Euclidean Sequencer Generator implementation.'
-                    url = 'https://www.wireguard.com/'
-
-                    licenses {
-                        license {
-                            name = 'The Apache Software License, Version 2.0'
-                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                            distribution = 'repo'
-                        }
-                    }
-                    scm {
-                        url = 'https://github.com/VolcanoMobile/euclidean-sequence-generator'
-                    }
-                    developers {
-                        developer {
-                            id  = 'loki666'
-                            name = 'Philippe Simons'
-                            email = 'contact@volcanomobile.net'
-                        }
-                    }
-                }
-            }
-        }
-        repositories {
-            maven {
-                name = "bintray"
-                url = uri("https://api.bintray.com/maven/volcanomobile/public/euclidean-sequence-generator/;publish=1;override=0")
-                credentials {
-                    username = properties.getProperty('bintrayUser')
-                    password = properties.getProperty('bintrayApiKey')
-                }
-            }
-        }
-    }
-}
+apply from: "publish.gradle"

@@ -1,0 +1,53 @@
+Properties properties = new Properties()
+File file = rootProject.file('local.properties')
+if (file.exists()) {
+    properties.load(file.newDataInputStream())
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                groupId = groupName
+                artifactId = 'euclidean-sequence-generator'
+                version = versionName
+
+                from components.java
+
+                pom {
+                    name = 'Eucliedean Sequence Generator'
+                    description = 'Simple Euclidean Sequencer Generator implementation.'
+                    url = 'https://www.wireguard.com/'
+
+                    licenses {
+                        license {
+                            name = 'The Apache Software License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                            distribution = 'repo'
+                        }
+                    }
+                    scm {
+                        url = 'https://github.com/VolcanoMobile/euclidean-sequence-generator'
+                    }
+                    developers {
+                        developer {
+                            id  = 'loki666'
+                            name = 'Philippe Simons'
+                            email = 'contact@volcanomobile.net'
+                        }
+                    }
+                }
+            }
+        }
+        repositories {
+            maven {
+                name = "bintray"
+                url = uri("https://api.bintray.com/maven/volcanomobile/public/euclidean-sequence-generator/;publish=1;override=0")
+                credentials {
+                    username = properties.hasProperty('bintrayUser') ? properties.getProperty('bintrayUser') : System.getenv('bintrayUser')
+                    password = properties.hasProperty('bintrayApiKey') ? properties.getProperty('bintrayApiKey') : System.getenv('bintrayApiKey')
+                }
+            }
+        }
+    }
+}
