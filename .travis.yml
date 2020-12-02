@@ -3,7 +3,14 @@ language: java
 branches:
   only:
     - master
+    - develop
     - /^release.*$/
 
 jdk:
   - oraclejdk11
+
+deploy:
+  - provider: script
+    script: gradlew publishReleasePublicationToBintrayRepository
+    on:
+      branch: master
