@@ -4,48 +4,53 @@ if (file.exists()) {
     properties.load(file.newDataInputStream())
 }
 
-afterEvaluate {
-    publishing {
-        publications {
-            release(MavenPublication) {
-                groupId = groupName
-                artifactId = 'euclidean-sequence-generator'
-                version = versionName
+artifactory {
+    contextUrl = 'https://volcanomobile.jfrog.io/artifactory'
+    publish {
+        repository {
+            repoKey = 'public'
+            username = properties.hasProperty('jFrogUsername') ? properties.getProperty('jFrogUsername') : System.getenv('jFrogUsername')
+            password = properties.hasProperty('jFrogPassword') ? properties.getProperty('jFrogPassword') : System.getenv('jFrogPassword')
+            maven = true
+        }
+        defaults {
+            publications('release')
+            publishBuildInfo = true   //Publish build-info to Artifactory (true by default)
+            publishArtifacts = true   //Publish artifacts to Artifactory (true by default)
+            publishPom = true   //Publish generated POM files to Artifactory (true by default).
+        }
+    }
+}
 
-                from components.java
+publishing {
+    publications {
+        release(MavenPublication) {
+            groupId = groupName
+            artifactId = 'euclidean-sequence-generator'
+            version = versionName
 
-                pom {
-                    name = 'Eucliedean Sequence Generator'
-                    description = 'Simple Euclidean Sequencer Generator implementation.'
-                    url = 'https://www.wireguard.com/'
+            from components.java
 
-                    licenses {
-                        license {
-                            name = 'The Apache Software License, Version 2.0'
-                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                            distribution = 'repo'
-                        }
-                    }
-                    scm {
-                        url = 'https://github.com/VolcanoMobile/euclidean-sequence-generator'
-                    }
-                    developers {
-                        developer {
-                            id  = 'loki666'
-                            name = 'Philippe Simons'
-                            email = 'contact@volcanomobile.net'
-                        }
+            pom {
+                name = 'Eucliedean Sequence Generator'
+                description = 'Simple Euclidean Sequencer Generator implementation.'
+
+                licenses {
+                    license {
+                        name = 'The Apache Software License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution = 'repo'
                     }
                 }
-            }
-        }
-        repositories {
-            maven {
-                name = "bintray"
-                url = uri("https://api.bintray.com/maven/volcanomobile/public/euclidean-sequence-generator/;publish=1;override=0")
-                credentials {
-                    username = properties.hasProperty('bintrayUser') ? properties.getProperty('bintrayUser') : System.getenv('bintrayUser')
-                    password = properties.hasProperty('bintrayApiKey') ? properties.getProperty('bintrayApiKey') : System.getenv('bintrayApiKey')
+                scm {
+                    url = 'https://github.com/VolcanoMobile/euclidean-sequence-generator'
+                }
+                developers {
+                    developer {
+                        id  = 'loki666'
+                        name = 'Philippe Simons'
+                        email = 'contact@volcanomobile.net'
+                    }
                 }
             }
         }
