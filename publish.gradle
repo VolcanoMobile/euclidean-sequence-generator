@@ -1,57 +1,21 @@
-Properties properties = new Properties()
-File file = rootProject.file('local.properties')
-if (file.exists()) {
-    properties.load(file.newDataInputStream())
-}
-
-artifactory {
-    contextUrl = 'https://volcanomobile.jfrog.io/artifactory'
-    publish {
-        repository {
-            repoKey = 'public'
-            username = properties.hasProperty('jFrogUsername') ? properties.getProperty('jFrogUsername') : System.getenv('jFrogUsername')
-            password = properties.hasProperty('jFrogPassword') ? properties.getProperty('jFrogPassword') : System.getenv('jFrogPassword')
-            maven = true
+afterEvaluate {
+    publishing {
+        repositories {
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/VolcanoMobile/euclidean-sequence-generator")
+                credentials {
+                    username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_USERNAME")
+                    password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+                }
+            }
         }
-        defaults {
-            publications('release')
-            publishBuildInfo = true   //Publish build-info to Artifactory (true by default)
-            publishArtifacts = true   //Publish artifacts to Artifactory (true by default)
-            publishPom = true   //Publish generated POM files to Artifactory (true by default).
-        }
-    }
-}
-
-publishing {
-    publications {
-        release(MavenPublication) {
-            groupId = groupName
-            artifactId = 'euclidean-sequence-generator'
-            version = versionName
-
-            from components.java
-
-            pom {
-                name = 'Eucliedean Sequence Generator'
-                description = 'Simple Euclidean Sequencer Generator implementation.'
-
-                licenses {
-                    license {
-                        name = 'The Apache Software License, Version 2.0'
-                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                        distribution = 'repo'
-                    }
-                }
-                scm {
-                    url = 'https://github.com/VolcanoMobile/euclidean-sequence-generator'
-                }
-                developers {
-                    developer {
-                        id  = 'loki666'
-                        name = 'Philippe Simons'
-                        email = 'contact@volcanomobile.net'
-                    }
-                }
+        publications {
+            release(MavenPublication) {
+                groupId = groupName
+                artifactId = 'euclidean-sequence-generator'
+                version = versionName
+                from components.java
             }
         }
     }
